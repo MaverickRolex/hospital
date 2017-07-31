@@ -1,0 +1,17 @@
+default: &default 
+  adapter: postgresql 
+  username: rolando 
+  password: 186425 
+  host: localhost 
+
+development: 
+  <<: *default 
+  database: hospital_development 
+
+test:
+  <<: *default 
+  database: hospital_test 
+
+production: 
+  <<: *default 
+  database: hospital_production
