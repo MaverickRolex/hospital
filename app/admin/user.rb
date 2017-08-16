@@ -3,28 +3,12 @@ ActiveAdmin.register User do
                 :password, :password_confirmation, :sistem_manager
 
   controller do
-    def new
-      if current_user.sistem_manager?
-        @user = User.new
-      else
-        flash[:error] = "You do not have permissions to perform this task"
-        redirect_to admin_users_path
-      end
-    end
-    def edit
-      if current_user.sistem_manager?
-        @user = User.find(params[:id])
-      else
-        flash[:error] = "You do not have permissions to perform this task"
-        redirect_to admin_users_path
-      end
-    end
-    def destroy
-      if current_user.sistem_manager?
-        @user = User.find(params[:id])
-        @user.destroy
-        redirect_to admin_users_path
-      else
+    before_action :validate_permitions, only: [:new, :edit, :destroy]
+
+    private
+
+    def validate_permitions
+      unless current_user.sistem_manager?
         flash[:error] = "You do not have permissions to perform this task"
         redirect_to admin_users_path
       end
@@ -34,14 +18,14 @@ ActiveAdmin.register User do
   index do
     selectable_column
     id_column
-    column :user_full_name
-    column :email
-    column :department_id 
-    column :boss_department
-    column :current_sign_in_at
-    column :sign_in_count
+    column "Name", :user_full_name
+    column "Email", :email
+    column "Department", :department_id 
+    column "Boss Dep.", :boss_department
+    column "Last Sign-In", :current_sign_in_at
     if current_user.sistem_manager?
-      actions
+      actions dropdown: true do |post|
+      end
     end
   end
 
@@ -60,6 +44,33 @@ ActiveAdmin.register User do
       f.input :sistem_manager
     end
     f.actions
+  end
+
+  show title: :user_full_name do
+    div do
+      attributes_table do
+        row :email
+        row :department_id
+        row :boss_department
+      end
+    end
+    panel "Log In Record" do
+      table_for user.sign_ins do
+        column :sign_in_at
+      end
+    end
+  end
+
+  sidebar "Laboral Days Asigned", only: :show do
+    attributes_table_for user.days_asigneds do
+      row :monday
+      row :tuesday
+      row :wednesday
+      row :thursday
+      row :friday
+      row :saturday
+      row :sunday
+    end
   end
 
 end

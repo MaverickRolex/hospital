@@ -47,12 +47,27 @@ module ActiveAdmin
 
     class SessionsController < ::Devise::SessionsController
       include ::ActiveAdmin::Devise::Controller
+      
       def create
         super do
-          #current_user.current_sign_in_at
-          binding.pry
+          @last_sign_in = SignIn.where("user_id = ?", current_user.id).last
+          if @last_sign_in == nil
+            save_sign_in
+          elsif !(@last_sign_in.sign_in_at.strftime("%m %d %Y") == DateTime.now.strftime("%m %d %Y"))
+            save_sign_in
+          end
         end
       end
+
+      private
+
+      def save_sign_in
+        @sign_in = SignIn.new
+        @sign_in.user_id = current_user.id
+        @sign_in.sign_in_at = current_user.current_sign_in_at
+        @sign_in.save
+      end
+
     end
 
 #    class PasswordsController < ::Devise::PasswordsController
