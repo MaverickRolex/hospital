@@ -6,4 +6,5 @@ class User < ApplicationRecord
 
   has_many :sign_ins
   has_many :days_asigneds
+  belongs_to :department
 end

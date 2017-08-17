@@ -20,9 +20,11 @@ ActiveAdmin.register User do
     id_column
     column "Name", :user_full_name
     column "Email", :email
-    column "Department", :department_id 
+    column "Department", :department_id do |dep|
+      dep.department.dep_name
+    end
     column "Boss Dep.", :boss_department
-    column "Last Sign-In", :current_sign_in_at
+    column "Last Sign In", :current_sign_in_at
     if current_user.sistem_manager?
       actions dropdown: true do |post|
       end
@@ -36,7 +38,8 @@ ActiveAdmin.register User do
   form do |f|
     f.inputs do
       f.input :user_full_name
-      f.input :department_id 
+      f.input :department_id, as: :select,
+              collection: Department.all.map {|dep| [dep.dep_name, dep.id]} 
       f.input :boss_department
       f.input :email
       f.input :password
