@@ -17,8 +17,8 @@ ActiveAdmin.register DaysAsigned do
   index do
     selectable_column
     id_column
-    column "User", :user_id do |asign|
-      asign.user.user_full_name
+    column "User", :user_id do |assign|
+      assign.user.user_full_name
     end
     column :monday
     column :tuesday
