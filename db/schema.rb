@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170817172320) do
+ActiveRecord::Schema.define(version: 20170822195121) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,13 +42,6 @@ ActiveRecord::Schema.define(version: 20170817172320) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "deparments", force: :cascade do |t|
-    t.string   "dep_name"
-    t.string   "description"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-  end
-
   create_table "departments", force: :cascade do |t|
     t.string   "dep_name"
     t.string   "description"
@@ -56,9 +49,24 @@ ActiveRecord::Schema.define(version: 20170817172320) do
     t.datetime "updated_at",  null: false
   end
 
+  create_table "item_transfers", force: :cascade do |t|
+    t.integer  "item_id"
+    t.integer  "origin_dep_id"
+    t.integer  "destiny_dep_id"
+    t.integer  "quantity"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
   create_table "sign_ins", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "sign_in_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "storages", force: :cascade do |t|
+    t.string   "item_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

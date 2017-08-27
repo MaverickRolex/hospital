@@ -1,0 +1,23 @@
+// Place all the styles related to the storages controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+#titlebar_left {
+  .storage-title {
+    display: inline-block;
+    font-weight: bold;
+  }
+}
+
+#main_content {
+  .stringish {
+    padding: 10px;
+  }
+  .label {
+    display: block;
+    width: 20%;
+    float: left;
+    font-weight: bold;
+    color: #5E6469;
+  }
+}

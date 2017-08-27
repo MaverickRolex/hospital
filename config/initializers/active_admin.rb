@@ -1,4 +1,6 @@
 ActiveAdmin.setup do |config|
+
+
   # == Site Title
   #
   # Set the title that is displayed on the main layout
@@ -290,4 +292,16 @@ ActiveAdmin.setup do |config|
   # You can inherit it with own class and inject it for all resources
   #
   # config.order_clause = MyOrderClause
+  
+  config.namespace :admin do |admin|
+    admin.build_menu :utility_navigation do |menu|
+      menu.add label: "Storage", priority: 0, url: Rails.application.routes.url_helpers.storages_path
+      menu.add label: "Transferences", priority: 1, url: Rails.application.routes.url_helpers.item_transfers_path
+      menu.add  :label  => proc{ current_active_admin_user.user_full_name },
+                :url  => proc { admin_user_path(current_user.id) },
+                :id   => 'current_user'
+      admin.add_logout_button_to_menu menu
+    end
+  end
+  
 end
