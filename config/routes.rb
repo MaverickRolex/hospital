@@ -5,4 +5,6 @@ Rails.application.routes.draw do
 
   root 'admin/dashboard#index'
 
+  resources :storages
+  resources :item_transfers
 end

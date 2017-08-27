@@ -6,6 +6,24 @@
 
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
+
+    <div class="header" id="header">
+      <h1 class="site_title" id="site_title">Hospital</h1>
+      <ul class="header-item tabs" id="tabs">
+        <li id="dashboard"><a href="/admin/dashboard">Dashboard</a></li>
+        <li id="comments"><a href="/admin/comments">Comments</a></li>
+        <li id="days_asigneds"><a href="/admin/days_asigneds">Days Asigneds</a></li>
+        <li id="departments"><a href="/admin/departments">Departments</a></li>
+        <li id="sign_ins"><a href="/admin/sign_ins">Sign Ins</a></li>
+        <li id="users"><a href="/admin/users">Users</a></li>
+      </ul>
+      <ul class="header-item tabs" id="utility_nav">
+        <li id="storage"> <%= link_to "Storage", storages_path %> </li>
+        <li id="transfer"> <%= link_to "Transferences", item_transfers_path %> </li>
+        <li id="current_user"> <%= link_to current_user.user_full_name, admin_user_path(current_user.id) %> </li>
+        <li id="logout"><a data-method="get" href="/admin/logout">Logout</a></li>
+      </ul>
+    </div>
   </head>
 
   <body>

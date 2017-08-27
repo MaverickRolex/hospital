@@ -1,15 +1,21 @@
 ActiveAdmin.register SignIn do
-# See permitted parameters documentation:
-# https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
-#
-# permit_params :list, :of, :attributes, :on, :model
-#
-# or
-#
-# permit_params do
-#   permitted = [:permitted, :attributes]
-#   permitted << :other if params[:action] == 'create' && current_user.admin?
-#   permitted
-# end
+  
+  permit_params :user_id, :sign_in_at
+
+  index do
+    selectable_column
+    id_column
+    column "User", :user_id do |user|
+      user.user.user_full_name
+    end
+    column "Sign In At", :sign_in_at
+    if current_user.sistem_manager?
+      actions dropdown: true do |post|
+      end
+    end
+  end
+
+  filter :user_id
+  filter :sign_in_at
 
 end

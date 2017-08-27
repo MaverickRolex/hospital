@@ -1,0 +1,41 @@
+<div class="title_bar" id="title_bar">
+  <div id="titlebar_left">
+    <span class="breadcrumb">
+      <span class="breadcrumb_sep">/</span>
+    </span>
+    <ol>
+      <li class="storage-title"><h2 id="page_title"> Storage | </h2></li>
+      <li class="storage-title"><h3>Edit <%= @item.item_name %></h3></li>
+    </ol>
+  </div>
+</div>
+<div class="flashes"></div>
+<div id="active_admin_content" class="with_sidebar">
+  <div id="main_content_wrapper">
+    <div id="main_content">
+      <%= form_for @item do |f| %>
+        <form class="formtastic">
+          <fieldset class="inputs">
+            <ol>
+              <div class="form-group">
+                <li class="string input optional stringish">
+                  <label class="label"> <%= f.label :item_name %> </label>
+                  <%= f.text_field :item_name, class: 'form-control' %>
+                  <br/>
+                </li>
+              </div>
+            </ol>
+          </fieldset>
+          <fieldset class="actions">
+            <ol>
+              <div class="form-group">
+                <li class="action input_action"> <%= f.submit "Edit Item" %> </li>
+                <li class="cancel"> <%= link_to "Cancel", storages_path %> </li>
+              </div>
+            </ol>
+          </fieldset>
+        </form>
+      <% end %>
+    </div>
+  </div>
+</div>
