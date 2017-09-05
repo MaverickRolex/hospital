@@ -1,0 +1,44 @@
+#title_bar.title_bar
+  #titlebar_left
+    %span.breadcrumb
+      %span.breadcrumb_sep /
+    %ol
+      %li.action-title
+        %h2#page_title Transferences |
+      %li.action-title
+        %h3 Edit Transference
+.flashes
+#active_admin_content.with_sidebar
+  #main_content_wrapper
+    #main_content
+      = form_for @transfer do |f|
+        %fieldset.inputs
+          %ol
+            .form-group
+              %li.string.input.optional.stringish
+                %label.label
+                  = f.label :item_name
+                = f.select :item_id, @items.collect { |i| [i.item_name, i.id] }, {prompt: 'Select Item'}
+                %br/
+              %li.string.input.optional.stringish
+                %label.label
+                  = f.label :origin_department
+                = f.select :origin_dep_id, @departments.collect { |d| [d.dep_name, d.id] }, {prompt: 'Provider or Select Origin Department'}
+                %br/
+              %li.string.input.optional.stringish
+                %label.label
+                  = f.label :destiny_department
+                = f.select :destiny_dep_id, @departments.collect { |d| [d.dep_name, d.id] }, {prompt: 'Select Destiny Department'}
+                %br/
+              %li.string.input.optional.stringish
+                %label.label
+                  = f.label :quantity
+                = f.number_field :quantity
+                %br/
+        %fieldset.actions
+          %ol
+            .form-group
+              %li.action.input_action
+                = f.submit "Edit Transference"
+              %li.cancel
+                = link_to "Cancel", item_transfers_path

@@ -1,0 +1,45 @@
+#title_bar.title_bar
+  #titlebar_left
+    %h2#page_title Transferences
+  #titlebar_right
+    .action_items
+      %span.action_item
+        = link_to "New Transference", new_item_transfer_path
+.flashes
+#active_admin_content.with_sidebar
+  .index_as_table
+    %table#index_table_storage.index_table.index
+      %thead
+        %tr>
+          %th.col
+            Id
+          %th.col
+            Item
+          %th.col
+            Origin Department
+          %th.col
+            Destiny Department
+          %th.col
+            Quantity
+          %th
+      %tbody
+        - @transfers.each do |transfer| 
+          %tr.odd
+            %td= transfer.id
+            %td= transfer.storage.item_name
+            - if transfer.from_provider?
+              %td Provider
+            - else
+              %td= transfer.origin_dep.dep_name
+            %td= transfer.destiny_dep.dep_name
+            %td= transfer.quantity
+            %td
+              .dropdown_menu
+                %a.dropdown_menu_button{:href => "#"} Actions
+                .dropdown_menu_list_wrapper{:style => "display: none;"}
+                  %ul.dropdown_menu_list
+                    %li.action-items-margin
+                      = link_to "Edit", edit_item_transfer_path(transfer)
+                    %li
+                      = link_to "Remove", transfer, 
+                                method: :delete, data: { confirm: "Are you sure?" }

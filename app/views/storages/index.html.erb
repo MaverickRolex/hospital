@@ -1,8 +1,5 @@
 <div class="title_bar" id="title_bar">
   <div id="titlebar_left">
-    <span class="breadcrumb">
-      <span class="breadcrumb_sep">/</span>
-    </span>
     <h2 id="page_title"> Storage </h2>
   </div>
   <div id="titlebar_right">
@@ -31,7 +28,7 @@
             <td><%= item.id %></td>
             <td><%= item.item_name %></td>
             <% @departments.each do |dep| %>
-              <td> Item Quantity </td>
+              <td> <%= item_quantity(item.id, dep.id) %> </td>
             <% end %>
             <td>
               <div class="dropdown_menu">
