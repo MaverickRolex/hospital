@@ -1,0 +1,29 @@
+#title_bar.title_bar
+  #titlebar_left
+    %h2#page_title= @item.item_name
+  #titlebar_right
+    .action_items
+      %span.action_item= link_to "Return", storages_path
+.flashes
+#active_admin_content
+  #main_content_wrapper
+    #main_content
+      .panel
+        %h3 Item Details
+        .panel_contents
+          .attributes_table
+            %table
+              %tbody
+                - @departments.each do |dep| 
+                  %tr.row
+                    %th= dep.dep_name
+                    %td= item_quantity(@item.id, dep.id)
+      .panel
+        %h3 General Quantity
+        .panel_contents
+          .attributes_table
+            %table
+              %tbody
+                %tr>
+                  %th Total #{@item.item_name}
+                  %td= total_item(@item.id)
