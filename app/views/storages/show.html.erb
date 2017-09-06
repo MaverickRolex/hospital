@@ -24,7 +24,7 @@
                 <% @departments.each do |dep| %>
                   <tr class="row">
                     <th> <%= dep.dep_name %> </th>
-                    <td>Quantity</td>
+                    <td> <%= item_quantity(@item.id, dep.id) %> </td>
                   </tr>
                 <% end %>
               </tbody>

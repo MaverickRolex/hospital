@@ -34,12 +34,14 @@ gem 'jbuilder', '~> 2.5'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-#Use devise for users administration
+# Use devise for users administration
 gem 'devise'
-#Use activeadmin for administrate processes
+# Use activeadmin for administrate processes
 gem 'activeadmin'
-
+# Use binding.pry
 gem 'pry'
+# Use HAML language
+gem "haml"
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
