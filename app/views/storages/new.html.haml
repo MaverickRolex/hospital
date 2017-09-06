@@ -1,0 +1,23 @@
+#title_bar.title_bar
+  #titlebar_left
+    %li.action-title
+      %h2#page_title Storage|
+    %li.action-title
+      %h3 Create New Item
+.flashes
+#active_admin_content.with_sidebar
+  #main_content_wrapper
+    #main_content
+      = form_for @item do |f| 
+        %fieldset.inputs
+          %ol>
+            .form-group
+              %li.string.input.optional.stringish
+                %label.label= f.label :item_name
+                = f.text_field :item_name
+                %br
+        %fieldset.actions
+          %ol
+            .form-group
+              %li.action.input_action= f.submit "Create Item"
+              %li.cancel= link_to "Cancel", storages_path

@@ -1,0 +1,33 @@
+#title_bar.title_bar
+  #titlebar_left
+    %h2#page_title Storage
+  #titlebar_right
+    .action_items
+      %span.action_item= link_to "New Item", new_storage_path
+.flashes
+#active_admin_content.with_sidebar
+  .index_as_table
+    %table#index_table_storage.index_table.index
+      %thead
+        %tr
+          %th.col Id
+          %th.col Item
+          - @departments.each do |dep| 
+            %th.col= dep.dep_name
+          %th
+      %tbody
+        - @items.each do |item| 
+          %tr.odd
+            %td= item.id
+            %td= item.item_name
+            - @departments.each do |dep| 
+              %td= item_quantity(item.id, dep.id)
+            %td
+              .dropdown_menu
+                %a.dropdown_menu_button{:href => "#"} Actions
+                .dropdown_menu_list_wrapper{:style => "display: none;"}
+                  %ul.dropdown_menu_list
+                    %li= link_to "View", item
+                    %li= link_to "Edit", edit_storage_path(item)
+                    %li= link_to "Remove", item,
+                                  method: :delete, data: { confirm: "Are you sure?" }
