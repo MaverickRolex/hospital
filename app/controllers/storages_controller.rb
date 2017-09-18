@@ -1,6 +1,6 @@
 class StoragesController < ApplicationController
 
-  before_action :validate_permitions, only: [:new, :update, :edit, :destroy]
+  before_action :validate_permitions, only: [:new, :edit, :destroy]
 
   def index
     @items = Storage.all
@@ -12,8 +12,7 @@ class StoragesController < ApplicationController
   end
 
   def create
-    @item = Storage.new(item_params)
-    @item.save
+    @item = Storage.create(item_params)
     redirect_to storages_path
   end
 
@@ -45,7 +44,7 @@ class StoragesController < ApplicationController
   end
 
   def validate_permitions
-    unless current_user.sistem_manager? or current_user.department_id == 5
+    unless current_user.sistem_manager? || current_user.department.dep_name == "Storage"
       flash[:error] = "You do not have permissions to perform this task"
       redirect_to storages_path
     end
