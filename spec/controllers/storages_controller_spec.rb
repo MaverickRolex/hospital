@@ -26,8 +26,7 @@ RSpec.describe StoragesController, type: :controller do
     end
   end
 
-  describe "GET new" do
-    
+  describe "GET new" do    
     before(:each) do
       user = User.create(email: "a@b.com",
                         password: "123456",
@@ -74,7 +73,6 @@ RSpec.describe StoragesController, type: :controller do
   end
 
   describe "POST create" do
-
     it "creates a new storage item" do
       expect { post :create, storage: { item_name: "New Storage Item" } }.
           to change { Storage.count }.from(0).to(1)
@@ -91,12 +89,11 @@ RSpec.describe StoragesController, type: :controller do
           to change { Storage.count }.from(0).to(1)
       end
 
-      it "raises a 'ACTIV' when not present" do
+      it "raises error when not present" do
         expect { post :create }.
           to raise_error(ActionController::ParameterMissing)
       end
     end
-
   end
 
   describe "GET show" do
@@ -125,14 +122,22 @@ RSpec.describe StoragesController, type: :controller do
         get :show, id: @item.id
         expect(assigns(:item)).to be_a(Storage)
       end
+
       it "raises error when not present" do
         expect { get :show }.to raise_error(ActionController::UrlGenerationError)
+      end
+
+      it "raises error when not match" do
+        expect { get :show, id: "no id" }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "raises error when not found" do
+        expect { get :show, id: 100 }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
 
   describe "GET edit" do
-
     before(:each) do
       user = User.create(email: "a@b.com",
                         password: "123456",
@@ -172,7 +177,7 @@ RSpec.describe StoragesController, type: :controller do
         expect(response).to redirect_to(storages_path)
       end
     end
-
+    
     context "params[:id]" do
       it "returns a storage item" do
         get :edit, id: @item.id
@@ -182,8 +187,15 @@ RSpec.describe StoragesController, type: :controller do
       it "raises error when not present" do
         expect { get :edit }.to raise_error(ActionController::UrlGenerationError)
       end
-    end
 
+      it "raises error when not match" do
+        expect { get :edit, id: "no id" }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "raises error when not found" do
+        expect { get :edit, id: 100 }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   describe "PUT update" do
@@ -191,9 +203,9 @@ RSpec.describe StoragesController, type: :controller do
       @item = Storage.create(item_name: "New Storage Item")
     end
      
-    it "returns a success response" do
+    it "redirects to storages path" do
       put :update, id: @item.id, storage: { item_name: "New Item Name" }
-      expect(@item).to redirect_to(storages_path)
+      expect(response).to redirect_to(storages_path)
     end
 
     context "params[:storage]" do
@@ -202,8 +214,8 @@ RSpec.describe StoragesController, type: :controller do
           to change { @item.reload.item_name }.from("New Storage Item").to("New Item Name")
       end
 
-      it "raises error when not present" do
-        expect { put :update }.to raise_error(ActionController::UrlGenerationError)
+      it "raises error when storage params not present" do
+        expect { put :update, id: @item.id }.to raise_error(ActionController::ParameterMissing)
       end
     end
 
@@ -215,6 +227,14 @@ RSpec.describe StoragesController, type: :controller do
 
       it "raises error when not present" do
         expect { put :update }.to raise_error(ActionController::UrlGenerationError)
+      end
+
+      it "raises error when not match" do
+        expect { put :update, id: "no id" }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "raises error when not found" do
+        expect { put :update, id: 100 }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -243,19 +263,19 @@ RSpec.describe StoragesController, type: :controller do
     context "validate_permitions before_action" do
       it "doesn't redirect to storages_path when current_user is a sistem_manager" do
         create_system_manager_user
-        get :edit, id: @item.id
-        expect(response).to render_template("edit")
+        delete :destroy, id: @item.id
+        expect(response).to redirect_to(storages_path)
       end
 
       it "doesn't redirect to storages_path when current_user is a storage" do
         create_storage_user
-        get :edit, id: @item.id
-        expect(response).to render_template("edit")
+        delete :destroy, id: @item.id
+        expect(response).to redirect_to(storages_path)
       end
 
       it "redirects to storages_path when current_user isn't a system_manager or storage department" do
         create_generic_user
-        get :edit, id: @item.id
+        delete :destroy, id: @item.id
         expect(response).to redirect_to(storages_path)
       end
     end
@@ -273,6 +293,14 @@ RSpec.describe StoragesController, type: :controller do
 
       it "raises error when not present" do
         expect { delete :destroy }.to raise_error(ActionController::UrlGenerationError)
+      end
+
+      it "raises error when not match" do
+        expect { delete :destroy, id: "no id" }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "raises error when not found" do
+        expect { delete :destroy, id: 100 }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -298,4 +326,5 @@ RSpec.describe StoragesController, type: :controller do
                        department: Department.create(dep_name: "Nurcery"))
     sign_in user
   end
+
 end

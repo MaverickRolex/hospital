@@ -1,6 +1,6 @@
 class ItemTransfersController < ApplicationController
 
-  before_action :validate_permitions, only: [:new, :update, :edit, :destroy]
+  before_action :validate_permitions, only: [:new, :edit, :destroy]
 
   def index
     @transfers = ItemTransfer.all
@@ -13,8 +13,7 @@ class ItemTransfersController < ApplicationController
   end
 
   def create
-    @transfer = ItemTransfer.new(transfer_params)
-    @transfer.save
+    @transfer = ItemTransfer.create(transfer_params)
     redirect_to item_transfers_path
   end
 
@@ -30,9 +29,10 @@ class ItemTransfersController < ApplicationController
     redirect_to item_transfers_path
   end
 
-    def destroy
+  def destroy
     @transfer = ItemTransfer.find(params[:id])
     @transfer.destroy
+    redirect_to item_transfers_path
   end
 
   private
@@ -42,7 +42,7 @@ class ItemTransfersController < ApplicationController
   end
 
   def validate_permitions
-    unless current_user.sistem_manager? or current_user.department_id == 5
+    unless current_user.sistem_manager? or current_user.department.dep_name == "Storage"
       flash[:error] = "You do not have permissions to perform this task"
       redirect_to item_transfers_path
     end
