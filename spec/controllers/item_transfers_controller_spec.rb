@@ -28,11 +28,7 @@ RSpec.describe ItemTransfersController, type: :controller do
 
   describe "GET new" do
     before(:each) do
-      user = User.create(email: "a@b.com",
-                        password: "123456",
-                        password_confirmation: "123456",
-                        department: Department.create(dep_name: "Storage"),
-                        sistem_manager: false)
+      user = create(:user, :operational_user)
       sign_in user
     end
 
@@ -62,20 +58,23 @@ RSpec.describe ItemTransfersController, type: :controller do
     end
 
     context "validate_permitions before_action" do
-      it "doesn't redirect to storages_path when current_user is a sistem_manager" do
-        create_system_manager_user
+      it "doesn't redirect to item_transfers_path when current_user is a sistem_manager" do
+        user = create(:user, :system_manager_user)
+        sign_in user
         get :new
         expect(response).to render_template("new")
       end
 
-      it "doesn't redirect to storages_path when current_user is a storage" do
-        create_storage_user
+      it "doesn't redirect to item_transfers_path when current_user belonga a storage department" do
+        user = create(:user, :storage_user)
+        sign_in user
         get :new
         expect(response).to render_template("new")
       end
 
-      it "redirects to storages_path when current_user isn't a system_manager or storage department" do
-        create_generic_user
+      it "redirects to item_transfers_path when current_user isn't a system_manager or storage department" do
+        user = create(:user, :generic_user)
+        sign_in user
         get :new
         expect(response).to redirect_to(item_transfers_path)
       end
@@ -115,7 +114,8 @@ RSpec.describe ItemTransfersController, type: :controller do
     before(:each) do
       @trans = ItemTransfer.create(item_id: @item.id, origin_dep_id: nil, 
                                   destiny_dep_id: @dep.id, quantity: 2)
-      create_operational_user
+      user = create(:user, :operational_user)
+      sign_in user
     end
 
     it "returns a success response" do
@@ -158,20 +158,23 @@ RSpec.describe ItemTransfersController, type: :controller do
     end
 
     context "validate_permitions before_action" do
-      it "doesn't redirect to storages_path when current_user is a sistem_manager" do
-        create_system_manager_user
+      it "doesn't redirect to item_transfers_path when current_user is a sistem_manager" do
+        user = create(:user, :system_manager_user)
+        sign_in user
         get :edit, id: @trans.id
         expect(response).to render_template("edit")
       end
 
-      it "doesn't redirect to storages_path when current_user is a storage" do
-        create_storage_user
+      it "doesn't redirect to item_transfers_path when current_user belonga a storage department" do
+        user = create(:user, :storage_user)
+        sign_in user
         get :edit, id: @trans.id
         expect(response).to render_template("edit")
       end
 
-      it "redirects to storages_path when current_user isn't a system_manager or storage department" do
-        create_generic_user
+      it "redirects to item_transfers_path when current_user isn't a system_manager or storage department" do
+        user = create(:user, :generic_user)
+        sign_in user
         get :edit, id: @trans.id
         expect(response).to redirect_to(item_transfers_path)
       end
@@ -242,7 +245,8 @@ RSpec.describe ItemTransfersController, type: :controller do
     before(:each) do
       @trans = ItemTransfer.create(item_id: @item.id, origin_dep_id: nil, 
                                   destiny_dep_id: @dep.id, quantity: 2)
-      create_operational_user
+      user = create(:user, :operational_user)
+      sign_in user
     end
 
     it "destroy a item transfer" do
@@ -257,19 +261,22 @@ RSpec.describe ItemTransfersController, type: :controller do
 
     context "validate_permitions before_action" do
       it "doesn't redirect to item_transfers_path when current_user is a sistem_manager" do
-        create_system_manager_user
+        user = create(:user, :system_manager_user)
+        sign_in user
         delete :destroy, id: @trans.id
         expect(response).to redirect_to(item_transfers_path)
       end
 
-      it "doesn't redirect to item_transfers_path when current_user is a storage" do
-        create_storage_user
+      it "doesn't redirect to item_transfers_path when current_user belonga a storage department" do
+        user = create(:user, :storage_user)
+        sign_in user
         delete :destroy, id: @trans.id
         expect(response).to redirect_to(item_transfers_path)
       end
 
       it "redirects to item_transfers_path when current_user isn't a system_manager or storage department" do
-        create_generic_user
+        user = create(:user, :generic_user)
+        sign_in user
         delete :destroy, id: @trans.id
         expect(response).to redirect_to(item_transfers_path)
       end
@@ -298,34 +305,6 @@ RSpec.describe ItemTransfersController, type: :controller do
         expect { delete :destroy, id: 100 }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
-  end
-
-  def create_system_manager_user
-    user = User.create(email: "sistem_manager@test.com",
-                      password: "123456",
-                      password_confirmation: "123456",
-                      department: Department.create(dep_name: "System Admin"),
-                      sistem_manager: true)
-    sign_in user
-  end
-  def create_storage_user
-    user = User.create(email: "storage@test.com",
-                      password: "123456",
-                      password_confirmation: "123456",
-                      department: Department.create(dep_name: "Storage"))
-    sign_in user
-  end
-  def create_generic_user
-    user = User.create(email: "test@test.com", password: "123456", 
-                       password_confirmation: "123456", 
-                       department: Department.create(dep_name: "Nurcery"))
-    sign_in user
-  end
-  def create_operational_user
-    user = User.create(email: "operate@tests.com", password: "123456", 
-                       password_confirmation: "123456", 
-                       department: Department.create(dep_name: "Storage"))
-    sign_in user
   end
 
 end

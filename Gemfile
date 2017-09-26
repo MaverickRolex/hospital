@@ -47,6 +47,7 @@ gem "haml"
 group :development, :test do
   gem 'rspec-rails', '~> 3.6'
   gem 'rails-controller-testing'
+  gem 'factory_girl_rails'
 end
 
 group :development, :test do
