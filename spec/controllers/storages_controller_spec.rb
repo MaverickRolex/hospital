@@ -28,11 +28,7 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "GET new" do    
     before(:each) do
-      user = User.create(email: "a@b.com",
-                        password: "123456",
-                        password_confirmation: "123456",
-                        department: Department.create(dep_name: "Storage"),
-                        sistem_manager: false)
+      user = create(:user, :operational_user)
       sign_in user
     end
 
@@ -53,19 +49,22 @@ RSpec.describe StoragesController, type: :controller do
 
     context "validate_permitions before_action" do
       it "doesn't redirect to storages_path when current_user is a sistem_manager" do
-        create_system_manager_user
+        user = create(:user, :system_manager_user)
+      sign_in user
         get :new
         expect(response).to render_template("new")
       end
 
-      it "doesn't redirect to storages_path when current_user is a storage" do
-        create_storage_user
+      it "doesn't redirect to storages_path when current_user belongs to storage department" do
+        user = create(:user, :storage_user)
+      sign_in user
         get :new
         expect(response).to render_template("new")
       end
 
       it "redirects to storages_path when current_user isn't a system_manager or storage department" do
-        create_generic_user
+        user = create(:user, :generic_user)
+      sign_in user
         get :new
         expect(response).to redirect_to(storages_path)
       end
@@ -139,11 +138,7 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "GET edit" do
     before(:each) do
-      user = User.create(email: "a@b.com",
-                        password: "123456",
-                        password_confirmation: "123456",
-                        department: Department.create(dep_name: "Storage"),
-                        sistem_manager: false)
+      user = create(:user, :operational_user)
       sign_in user
       @item = Storage.create(item_name: "New Storage Item")
     end
@@ -160,19 +155,22 @@ RSpec.describe StoragesController, type: :controller do
 
     context "validate_permitions before_action" do
       it "doesn't redirect to storages_path when current_user is a sistem_manager" do
-        create_system_manager_user
+        user = create(:user, :system_manager_user)
+      sign_in user
         get :edit, id: @item.id
         expect(response).to render_template("edit")
       end
 
-      it "doesn't redirect to storages_path when current_user is a storage" do
-        create_storage_user
+      it "doesn't redirect to storages_path when current_user belongs to storage department" do
+        user = create(:user, :storage_user)
+      sign_in user
         get :edit, id: @item.id
         expect(response).to render_template("edit")
       end
 
       it "redirects to storages_path when current_user isn't a system_manager or storage department" do
-        create_generic_user
+        user = create(:user, :generic_user)
+      sign_in user
         get :edit, id: @item.id
         expect(response).to redirect_to(storages_path)
       end
@@ -241,11 +239,7 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "DELETE destroy" do
     before(:each) do
-      user = User.create(email: "a@b.com",
-                        password: "123456",
-                        password_confirmation: "123456",
-                        department: Department.create(dep_name: "Storage"),
-                        sistem_manager: false)
+      user = create(:user, :operational_user)
       sign_in user
       @item = Storage.create( item_name: "New Storage Item")
     end
@@ -262,19 +256,22 @@ RSpec.describe StoragesController, type: :controller do
 
     context "validate_permitions before_action" do
       it "doesn't redirect to storages_path when current_user is a sistem_manager" do
-        create_system_manager_user
+        user = create(:user, :system_manager_user)
+        sign_in user
         delete :destroy, id: @item.id
         expect(response).to redirect_to(storages_path)
       end
 
-      it "doesn't redirect to storages_path when current_user is a storage" do
-        create_storage_user
+      it "doesn't redirect to storages_path when current_user is belongs to storage department" do
+        user = create(:user, :storage_user)
+        sign_in user
         delete :destroy, id: @item.id
         expect(response).to redirect_to(storages_path)
       end
 
       it "redirects to storages_path when current_user isn't a system_manager or storage department" do
-        create_generic_user
+        user = create(:user, :generic_user)
+        sign_in user
         delete :destroy, id: @item.id
         expect(response).to redirect_to(storages_path)
       end
@@ -303,28 +300,6 @@ RSpec.describe StoragesController, type: :controller do
         expect { delete :destroy, id: 100 }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
-  end
-
-  def create_system_manager_user
-    user = User.create(email: "sistem_manager@test.com",
-                      password: "123456",
-                      password_confirmation: "123456",
-                      department: Department.create(dep_name: "System Admin"),
-                      sistem_manager: true)
-    sign_in user
-  end
-  def create_storage_user
-    user = User.create(email: "storage@test.com",
-                      password: "123456",
-                      password_confirmation: "123456",
-                      department: Department.create(dep_name: "Storage"))
-    sign_in user
-  end
-  def create_generic_user
-    user = User.create(email: "test@test.com", password: "123456", 
-                       password_confirmation: "123456", 
-                       department: Department.create(dep_name: "Nurcery"))
-    sign_in user
   end
 
 end
