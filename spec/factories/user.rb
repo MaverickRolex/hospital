@@ -4,27 +4,21 @@ FactoryGirl.define do
     password_confirmation "123456"
   end
 
-  trait :operational_user do
-    email "operate@tests.com"
-    department_id Department.create(dep_name: "Storage").id
-    sistem_manager false
-  end
-
   trait :system_manager_user do
     email "system_admin@test.com"
-    department_id Department.create(dep_name: "System Admin").id
+    department { build(:department, :dep_system_manager) }
     sistem_manager true
   end
 
   trait :storage_user do
-    email "storage@test.com"
-    department_id Department.create(dep_name: "Storage").id
+    sequence(:email) { |n| "storage#{n}@test.com" }
+    department { build(:department, :dep_storage) }
     sistem_manager false
   end
 
   trait :generic_user do
     email "generic@test.com"
-    department_id Department.create(dep_name: "Nurcery").id
+    department { build(:department) }
     sistem_manager false
   end
 end
