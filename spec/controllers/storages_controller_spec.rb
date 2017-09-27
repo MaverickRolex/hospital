@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe StoragesController, type: :controller do
 
   describe "GET index" do
-    it "returns a success response" do
+    it "returns a successfull response" do
       get :index
       expect(response).to be_success
     end
@@ -14,7 +14,7 @@ RSpec.describe StoragesController, type: :controller do
     end
 
     it "returns storage items list" do
-      storage_item = create(:storage )
+      storage_item = create(:storage)
       get :index
       expect(assigns(:items)).to include(storage_item)
     end
@@ -28,11 +28,11 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "GET new" do    
     before(:each) do
-      user = create(:user, :operational_user)
+      user = create(:user, :storage_user)
       sign_in user
     end
 
-    it "returns a success response" do
+    it "returns a successfull response" do
       get :new
       expect(response).to be_success
     end
@@ -48,7 +48,7 @@ RSpec.describe StoragesController, type: :controller do
     end
 
     context "validate_permitions before_action" do
-      it "doesn't redirect to storages_path when current_user is a sistem_manager" do
+      it "doesn't redirect to storages_path when current_user is a system_manager" do
         user = create(:user, :system_manager_user)
         sign_in user
         get :new
@@ -100,12 +100,12 @@ RSpec.describe StoragesController, type: :controller do
       @item = create(:storage)
     end
 
-    it "returns a success response" do
+    it "returns a successfull response" do
       get :show, id: @item.id
       expect(response).to be_success
     end
     
-    it "returns department list" do
+    it "returns departments list" do
       department = create(:department)
       get :show, id: @item.id
       expect(assigns(:departments)).to include(department)
@@ -138,12 +138,13 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "GET edit" do
     before(:each) do
-      user = create(:user, :operational_user)
+      user = create(:user, :storage_user)
       sign_in user
       @item = create(:storage)
     end
 
-    it "returns a success response" do
+    it "returns a successfull
+     response" do
       get :edit, id: @item.id
       expect(response).to be_success
     end
@@ -154,7 +155,7 @@ RSpec.describe StoragesController, type: :controller do
     end
 
     context "validate_permitions before_action" do
-      it "doesn't redirect to storages_path when current_user is a sistem_manager" do
+      it "doesn't redirect to storages_path when current_user is a system_manager" do
         user = create(:user, :system_manager_user)
         sign_in user
         get :edit, id: @item.id
@@ -202,6 +203,7 @@ RSpec.describe StoragesController, type: :controller do
     end
      
     it "redirects to storages path" do
+  
       put :update, id: @item.id, storage: { item_name: "New Item Name" }
       expect(response).to redirect_to(storages_path)
     end
@@ -239,13 +241,12 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "DELETE destroy" do
     before(:each) do
-      user = create(:user, :operational_user)
+      user = create(:user, :storage_user)
       sign_in user
       @item = create(:storage)
     end
 
     it "destroy a storage item" do
-      binding.pry
       expect { delete :destroy, id: @item.id }.
         to change { Storage.count }.from(1).to(0)
     end
@@ -256,7 +257,7 @@ RSpec.describe StoragesController, type: :controller do
     end
 
     context "validate_permitions before_action" do
-      it "doesn't redirect to storages_path when current_user is a sistem_manager" do
+      it "doesn't redirect to storages_path when current_user is a system_manager" do
         user = create(:user, :system_manager_user)
         sign_in user
         delete :destroy, id: @item.id

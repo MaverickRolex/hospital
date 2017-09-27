@@ -1,11 +1,8 @@
 FactoryGirl.define do
   factory :item_transfer do
+    storage { build(:storage) }
     origin_dep_id nil
+    destiny_dep { build(:department) }
     quantity 2
-
-    before(:create) do |item_transfer|
-      item_transfer.storage = build(:storage)
-      item_transfer.destiny_dep = build(:department)
-    end
   end
 end
