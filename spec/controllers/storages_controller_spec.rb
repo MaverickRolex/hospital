@@ -14,13 +14,13 @@ RSpec.describe StoragesController, type: :controller do
     end
 
     it "returns storage items list" do
-      storage_item = Storage.create(item_name: "New storage item")
+      storage_item = create(:storage )
       get :index
       expect(assigns(:items)).to include(storage_item)
     end
 
     it "returns departments list" do
-      department = Department.create(dep_name: "New department")
+      department = create(:department)
       get :index
       expect(assigns(:departments)).to include(department)
     end
@@ -50,21 +50,21 @@ RSpec.describe StoragesController, type: :controller do
     context "validate_permitions before_action" do
       it "doesn't redirect to storages_path when current_user is a sistem_manager" do
         user = create(:user, :system_manager_user)
-      sign_in user
+        sign_in user
         get :new
         expect(response).to render_template("new")
       end
 
       it "doesn't redirect to storages_path when current_user belongs to storage department" do
         user = create(:user, :storage_user)
-      sign_in user
+        sign_in user
         get :new
         expect(response).to render_template("new")
       end
 
       it "redirects to storages_path when current_user isn't a system_manager or storage department" do
         user = create(:user, :generic_user)
-      sign_in user
+        sign_in user
         get :new
         expect(response).to redirect_to(storages_path)
       end
@@ -97,7 +97,7 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "GET show" do
     before(:each) do
-      @item = Storage.create(item_name: "New Storage Item")
+      @item = create(:storage)
     end
 
     it "returns a success response" do
@@ -106,7 +106,7 @@ RSpec.describe StoragesController, type: :controller do
     end
     
     it "returns department list" do
-      department = Department.create(dep_name: "New department")
+      department = create(:department)
       get :show, id: @item.id
       expect(assigns(:departments)).to include(department)
     end
@@ -140,7 +140,7 @@ RSpec.describe StoragesController, type: :controller do
     before(:each) do
       user = create(:user, :operational_user)
       sign_in user
-      @item = Storage.create(item_name: "New Storage Item")
+      @item = create(:storage)
     end
 
     it "returns a success response" do
@@ -156,21 +156,21 @@ RSpec.describe StoragesController, type: :controller do
     context "validate_permitions before_action" do
       it "doesn't redirect to storages_path when current_user is a sistem_manager" do
         user = create(:user, :system_manager_user)
-      sign_in user
+        sign_in user
         get :edit, id: @item.id
         expect(response).to render_template("edit")
       end
 
       it "doesn't redirect to storages_path when current_user belongs to storage department" do
         user = create(:user, :storage_user)
-      sign_in user
+        sign_in user
         get :edit, id: @item.id
         expect(response).to render_template("edit")
       end
 
       it "redirects to storages_path when current_user isn't a system_manager or storage department" do
         user = create(:user, :generic_user)
-      sign_in user
+        sign_in user
         get :edit, id: @item.id
         expect(response).to redirect_to(storages_path)
       end
@@ -198,7 +198,7 @@ RSpec.describe StoragesController, type: :controller do
 
   describe "PUT update" do
     before(:each) do
-      @item = Storage.create(item_name: "New Storage Item")
+      @item = create(:storage, :storage_item_updated)
     end
      
     it "redirects to storages path" do
@@ -209,7 +209,7 @@ RSpec.describe StoragesController, type: :controller do
     context "params[:storage]" do
       it "updates a storage item" do
         expect { put :update, id: @item.id, storage: { item_name: "New Item Name" } }.
-          to change { @item.reload.item_name }.from("New Storage Item").to("New Item Name")
+          to change { @item.reload.item_name }.from("Storage Item").to("New Item Name")
       end
 
       it "raises error when storage params not present" do
@@ -241,10 +241,11 @@ RSpec.describe StoragesController, type: :controller do
     before(:each) do
       user = create(:user, :operational_user)
       sign_in user
-      @item = Storage.create( item_name: "New Storage Item")
+      @item = create(:storage)
     end
 
     it "destroy a storage item" do
+      binding.pry
       expect { delete :destroy, id: @item.id }.
         to change { Storage.count }.from(1).to(0)
     end

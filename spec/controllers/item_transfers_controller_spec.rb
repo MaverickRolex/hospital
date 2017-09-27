@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe ItemTransfersController, type: :controller do
 
   before(:each) do
-    @item = Storage.create(item_name: "Test Item")
-    @dep = Department.create(dep_name: "Department")
+    @item = create(:storage)
+    @dep = create(:department)
   end
 
   describe "GET index" do
@@ -19,8 +19,7 @@ RSpec.describe ItemTransfersController, type: :controller do
     end
 
     it "returns item transactions list" do
-      trans = ItemTransfer.create(item_id: @item.id, origin_dep_id: nil, 
-                                  destiny_dep_id: @dep.id, quantity: 2)
+      trans = create(:item_transfer, )
       get :index
       expect(assigns(:transfers)).to include(trans)
     end
@@ -112,8 +111,7 @@ RSpec.describe ItemTransfersController, type: :controller do
 
   describe "GET edit" do
     before(:each) do
-      @trans = ItemTransfer.create(item_id: @item.id, origin_dep_id: nil, 
-                                  destiny_dep_id: @dep.id, quantity: 2)
+      @trans = create(:item_transfer)
       user = create(:user, :operational_user)
       sign_in user
     end
@@ -194,19 +192,19 @@ RSpec.describe ItemTransfersController, type: :controller do
 
     context "params[:item_transfer]" do
       it "updates a storage item" do
-        new_item = Storage.create(item_name: "Other Test Item") 
+        new_item = create(:storage) 
         expect { put :update, id: @trans.id, item_transfer: { item_id: new_item.id } }.
           to change { @trans.reload.item_id }.from(@item.id).to(new_item.id)
       end
 
       it "updates a transfer origin department" do
-        new_dep = Department.create(dep_name: "Other Department") 
+        new_dep = create(:department) 
         expect { put :update, id: @trans.id, item_transfer: { origin_dep_id: new_dep.id } }.
           to change { @trans.reload.origin_dep_id }.from(nil).to(new_dep.id)
       end
 
       it "updates a transfer destiny department" do
-        new_dep = Department.create(dep_name: "Other Department")
+        new_dep = create(:department)
         expect { put :update, id: @trans.id, item_transfer: { destiny_dep_id: new_dep.id } }.
           to change { @trans.reload.destiny_dep_id }.from(@dep.id).to(new_dep.id)
       end
@@ -243,8 +241,7 @@ RSpec.describe ItemTransfersController, type: :controller do
 
   describe "DELETE destroy" do
     before(:each) do
-      @trans = ItemTransfer.create(item_id: @item.id, origin_dep_id: nil, 
-                                  destiny_dep_id: @dep.id, quantity: 2)
+      @trans = create(:item_transfer)
       user = create(:user, :operational_user)
       sign_in user
     end
