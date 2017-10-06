@@ -16,7 +16,7 @@ class Provider < ApplicationRecord
   end
 
   def self.find_by_product_prioritized(item_id)
-    self.joins(storage_providers: :storages).
+    self.joins(storage_providers: :storage).
       where("providers.priority = 0")
   end
 end

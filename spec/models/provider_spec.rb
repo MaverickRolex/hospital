@@ -42,6 +42,17 @@ RSpec.describe Provider, type: :model do
     end
   end
 
+  describe "method" do
+    it "return priority provider" do
+      item = create(:storage)
+      primary = create(:provider, name: "primary", priority: 0)
+      secundary = create(:provider, name: "secundary", priority: 1)
+      create(:storage_provider, storage: item, provider: primary)
+      create(:storage_provider, storage: item, provider: secundary)
+      expect(Provider.find_by_product_prioritized(item.id)).eql?(primary)
+    end
+  end
+
   describe "asociations" do
     it "has_many storages through storage_providers" do
       assc = described_class.reflect_on_association(:storages)
