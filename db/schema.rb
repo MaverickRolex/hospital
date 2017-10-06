@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170830184034) do
+ActiveRecord::Schema.define(version: 20171004182605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,11 +58,29 @@ ActiveRecord::Schema.define(version: 20170830184034) do
     t.datetime "updated_at",     null: false
   end
 
+  create_table "providers", force: :cascade do |t|
+    t.boolean  "active"
+    t.text     "address"
+    t.string   "name"
+    t.integer  "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "sign_ins", force: :cascade do |t|
     t.integer  "user_id"
     t.datetime "sign_in_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "storage_providers", force: :cascade do |t|
+    t.integer  "storage_id"
+    t.integer  "provider_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["provider_id"], name: "index_storage_providers_on_provider_id", using: :btree
+    t.index ["storage_id"], name: "index_storage_providers_on_storage_id", using: :btree
   end
 
   create_table "storages", force: :cascade do |t|
