@@ -3,11 +3,11 @@ require 'rails_helper'
 RSpec.describe Storage, type: :model do
 
   describe "validations" do
-    it "is valid with valid attributes" do
+    it "is valid" do
       expect(build(:storage)).to be_valid
     end
 
-    it "is not valid without a storage item name" do
+    it "is not valid with item_name blank" do
       expect(build(:storage, item_name: nil)).to_not be_valid
     end
 

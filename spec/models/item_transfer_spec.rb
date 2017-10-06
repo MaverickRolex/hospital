@@ -6,13 +6,13 @@ RSpec.describe ItemTransfer, type: :model do
     it "is valid with valid attributes" do
       expect(build(:item_transfer)).to be_valid
     end
-    it "is not valid without a item_id" do
+    it "is not valid without item_id" do
       expect(build(:item_transfer, item_id: nil)).to_not be_valid
     end
-    it "is not valid without a destiny_dep_id" do
+    it "is not valid without destiny_dep_id" do
       expect(build(:item_transfer, destiny_dep_id: nil)).to_not be_valid
     end
-    it "is not valid without a quantity" do
+    it "is not valid without quantity" do
       expect(build(:item_transfer, quantity: nil)).to_not be_valid
     end
   end

@@ -3,10 +3,9 @@ class Provider < ApplicationRecord
   has_many :storages, through: :storage_providers
   has_many :storage_providers
 
-
   validates :name, uniqueness: true
   
-  before_save :set_name
+  before_validation :set_name
 
   scope :active, -> { where(active: true) }
 
