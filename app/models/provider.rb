@@ -10,13 +10,13 @@ class Provider < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   def set_name
-    if Provider.where(name: self.name).count > 0
+    while Provider.where(name: self.name).count > 0 do
       self.name = "#{self.name}_1"
     end
   end
 
   def self.find_by_product_prioritized(item_id)
     self.joins(storage_providers: :storage).
-      where("providers.priority = 0")
+      where("storages.id = ?", item_id).order(priority: :asc)
   end
 end

@@ -6,8 +6,10 @@ RSpec.describe Provider, type: :model do
       expect(build(:provider)).to be_valid
     end
     it "is not valid if name already exists" do
+      Provider.any_instance.stub(:set_name).and_return(true)
       create(:provider, name: "provider")
-      expect(build(:provider, name: "provider")).to_not be_valid
+      expect { create(:provider, name: "provider") }.
+        to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 
@@ -21,6 +23,20 @@ RSpec.describe Provider, type: :model do
       create(:provider, name: "name")
       object = create(:provider, name: "name")
       expect(object.name).to eql("name_1")
+    end
+    it "add _1_1 to name" do
+      (1..2).each do
+        create(:provider, name: "name")
+      end
+      object = create(:provider, name: "name")
+      expect(object.name).to eql("name_1_1")
+    end
+    it "add _1_1_1 to name" do
+      (1..3).each do
+        create(:provider, name: "name")
+      end
+      object = create(:provider, name: "name")
+      expect(object.name).to eql("name_1_1_1")
     end
   end
 
@@ -43,13 +59,23 @@ RSpec.describe Provider, type: :model do
   end
 
   describe "method" do
-    it "return priority provider" do
-      item = create(:storage)
-      primary = create(:provider, name: "primary", priority: 0)
-      secundary = create(:provider, name: "secundary", priority: 1)
-      create(:storage_provider, storage: item, provider: primary)
-      create(:storage_provider, storage: item, provider: secundary)
-      expect(Provider.find_by_product_prioritized(item.id)).eql?(primary)
+    before(:each) do
+      @item = create(:storage)
+      @primary = create(:provider, name: "primary", priority: 0)
+      @secundary = create(:provider, name: "secundary", priority: 1)
+      create(:storage_provider, storage: @item, provider: @primary)
+      create(:storage_provider, storage: @item, provider: @secundary)
+    end
+    it "first priority provider return 'contract'" do
+      list = Provider.find_by_product_prioritized(@item.id)
+      expect(list.first.priority).to eq("contract")
+    end
+    it "last priority provider return 'individual_sale'" do
+      list = Provider.find_by_product_prioritized(@item.id)
+      expect(list.last.priority).to eq("individual_sale")
+    end
+    it "returns priority provider list" do
+      expect(Provider.find_by_product_prioritized(@item.id)).to match_array([@primary, @secundary])
     end
   end
 
