@@ -22,11 +22,11 @@ RSpec.describe ItemTransfer, type: :model do
       assc = described_class.reflect_on_association(:storage)
       expect(assc.macro).to eq :belongs_to
     end
-    it "has many origin_dep" do
+    it "belongs_to origin_dep" do
       assc = described_class.reflect_on_association(:origin_dep)
       expect(assc.macro).to eq :belongs_to
     end
-    it "has many destiny_dep" do
+    it "belongs_to destiny_dep" do
       assc = described_class.reflect_on_association(:destiny_dep)
       expect(assc.macro).to eq :belongs_to
     end
