@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171004182605) do
+ActiveRecord::Schema.define(version: 20171012054815) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,8 +54,10 @@ ActiveRecord::Schema.define(version: 20171004182605) do
     t.integer  "origin_dep_id"
     t.integer  "destiny_dep_id"
     t.integer  "quantity"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
+    t.integer  "storage_oper_user_id"
+    t.integer  "trans_request_user_id"
   end
 
   create_table "providers", force: :cascade do |t|

@@ -295,8 +295,9 @@ ActiveAdmin.setup do |config|
   
   config.namespace :admin do |admin|
     admin.build_menu :utility_navigation do |menu|
-      menu.add label: "Storage", priority: 0, url: Rails.application.routes.url_helpers.storages_path
-      menu.add label: "Transferences", priority: 1, url: Rails.application.routes.url_helpers.item_transfers_path
+      menu.add label: "Providers", priority: 0, url: Rails.application.routes.url_helpers.providers_path
+      menu.add label: "Storage", priority: 1, url: Rails.application.routes.url_helpers.storages_path
+      menu.add label: "Transferences", priority: 2, url: Rails.application.routes.url_helpers.item_transfers_path
       menu.add  :label  => proc{ current_active_admin_user.user_full_name },
                 :url  => proc { admin_user_path(current_user.id) },
                 :id   => 'current_user'

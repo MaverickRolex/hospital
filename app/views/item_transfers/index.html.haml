@@ -14,6 +14,10 @@
           %th.col
             Id
           %th.col
+            Storage Operator
+          %th.col
+            Trans. Requester User
+          %th.col
             Item
           %th.col
             Origin Department
@@ -26,6 +30,8 @@
         - @transfers.each do |transfer| 
           %tr.odd
             %td= transfer.id
+            %td= transfer.storage_oper.user_full_name
+            %td= transfer.trans_requester.try(:user_full_name)
             %td= transfer.storage.item_name
             - if transfer.from_provider?
               %td Provider

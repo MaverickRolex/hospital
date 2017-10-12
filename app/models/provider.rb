@@ -8,6 +8,8 @@ class Provider < ApplicationRecord
   before_validation :set_name
 
   scope :active, -> { where(active: true) }
+  scope :find_items_with_providers, -> (item_id) { joins(storage_providers: :storage).
+      where("storages.id = ?", item_id).order(priority: :asc) }
 
   def set_name
     while Provider.where(name: self.name).count > 0 do
@@ -15,8 +17,8 @@ class Provider < ApplicationRecord
     end
   end
 
-  def self.find_by_product_prioritized(item_id)
-    self.joins(storage_providers: :storage).
-      where("storages.id = ?", item_id).order(priority: :asc)
-  end
+  #def self.find_by_product_prioritized(item_id)
+  #  self.joins(storage_providers: :storage).
+  #    where("storages.id = ?", item_id).order(priority: :asc)
+  #end
 end
