@@ -16,23 +16,28 @@
           %ol
             .form-group
               %li.string.input.optional.stringish
-                %label.label
-                  = f.label :item_name
+                %label.label= f.label :storage_operator
+                = f.hidden_field :storage_oper_user_id, value: current_user.id
+                = current_user.user_full_name
+                %br
+              %li.string.input.optional.stringish
+                %label.label= f.label :requester_user
+                = f.select :trans_request_user_id, @users.collect { |u| [u.user_full_name, u.id] }, {prompt: 'Select Requester User'}
+                %br
+              %li.string.input.optional.stringish
+                %label.label= f.label :item_name
                 = f.select :item_id, @items.collect { |i| [i.item_name, i.id] }, {prompt: 'Select Item'}
                 %br/
               %li.string.input.optional.stringish
-                %label.label
-                  = f.label :origin_department
+                %label.label= f.label :origin_department
                 = f.select :origin_dep_id, @departments.collect { |d| [d.dep_name, d.id] }, {prompt: 'Provider or Select Origin Department'}
                 %br/
               %li.string.input.optional.stringish
-                %label.label
-                  = f.label :destiny_department
+                %label.label= f.label :destiny_department
                 = f.select :destiny_dep_id, @departments.collect { |d| [d.dep_name, d.id] }, {prompt: 'Select Destiny Department'}
                 %br/
               %li.string.input.optional.stringish
-                %label.label
-                  = f.label :quantity
+                %label.label= f.label :quantity
                 = f.number_field :quantity
                 %br/
         %fieldset.actions

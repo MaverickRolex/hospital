@@ -7,4 +7,5 @@ Rails.application.routes.draw do
 
   resources :storages
   resources :item_transfers
+  resources :providers
 end

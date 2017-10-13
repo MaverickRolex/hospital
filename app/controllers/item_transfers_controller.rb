@@ -8,6 +8,7 @@ class ItemTransfersController < ApplicationController
 
   def new
     @transfer = ItemTransfer.new
+    @users = User.all
     @items = Storage.all
     @departments = Department.all
   end
@@ -19,6 +20,7 @@ class ItemTransfersController < ApplicationController
 
   def edit
     @transfer = ItemTransfer.find(params[:id])
+    @users = User.all
     @items = Storage.all
     @departments = Department.all
   end
@@ -38,7 +40,8 @@ class ItemTransfersController < ApplicationController
   private
 
   def transfer_params
-    params.require(:item_transfer).permit(:item_id, :origin_dep_id, :destiny_dep_id, :quantity)
+    params.require(:item_transfer).
+      permit(:storage_oper_user_id, :trans_request_user_id, :item_id, :origin_dep_id, :destiny_dep_id, :quantity)
   end
 
   def validate_permitions
