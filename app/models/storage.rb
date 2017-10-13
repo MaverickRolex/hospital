@@ -7,9 +7,6 @@ class Storage < ApplicationRecord
   has_many :providers, through: :storage_providers
   has_many :storage_providers
 
-  #scope :find_items_with_providers, -> { joins(storage_providers: :provider) }
+  scope :find_items_with_providers, -> { joins(storage_providers: :provider) }
 
-  def self.find_items_with_providers
-    self.joins(storage_providers: :provider)
-  end
 end

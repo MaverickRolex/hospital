@@ -28,7 +28,6 @@ class ItemTransfersController < ApplicationController
   def update
     @transfer = ItemTransfer.find(params[:id])
     @transfer.update_attributes(transfer_params)
-    binding.pry
     redirect_to item_transfers_path
   end
 
